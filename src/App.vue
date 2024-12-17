@@ -9,9 +9,12 @@ import { RouterView } from 'vue-router';
     <BCollapse id="nav-collapse" is-nav>
       <BNavbarNav>
         <BNavItem to="/">Termékek</BNavItem>
+        <BNavItem to="/add-new-product">Termék felvétele</BNavItem>
       </BNavbarNav>
     </BCollapse>
   </BNavbar>
 
-  <RouterView />
+  <BContainer>
+    <RouterView />
+  </BContainer>
 </template>
