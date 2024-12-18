@@ -1,12 +1,27 @@
 <script setup>
 import ProductList from '@/components/ProductList.vue';
+import { useCartStore } from '@/stores/cart';
 import { useProductStore } from '@/stores/product.js';
+import { toRaw } from 'vue';
 
 const productStore = useProductStore();
+const cartStore = useCartStore();
+
+function addToCartHandler(product) {
+  const cartProduct = { ...toRaw(product), pieceQty: 1 };
+  delete cartProduct.stock;
+
+  cartStore.addToCart(cartProduct);
+  productStore.decreaseProductStockById(cartProduct.id);
+}
 </script>
 
 <template>
   <h2 class="text-center">Termékek</h2>
-  <ProductList v-if="productStore.products.length > 0" :products="productStore.products" />
+  <ProductList
+    v-if="productStore.products.length > 0"
+    :products="productStore.products"
+    @add-to-cart="addToCartHandler"
+  />
   <p v-else class="text-center">Nincsenek elérhető termékek.</p>
 </template>

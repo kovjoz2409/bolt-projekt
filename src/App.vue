@@ -10,6 +10,7 @@ import { RouterView } from 'vue-router';
       <BNavbarNav>
         <BNavItem to="/">Termékek</BNavItem>
         <BNavItem to="/add-new-product">Termék felvétele</BNavItem>
+        <BNavItem to="/cart">Kosár</BNavItem>
       </BNavbarNav>
     </BCollapse>
   </BNavbar>
