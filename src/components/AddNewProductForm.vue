@@ -40,13 +40,13 @@ const onSubmit = handleSubmit((values) => {
       <BFormInput id="product-name" v-model="name" type="text" placeholder="Répa" required />
     </BFormGroup>
     <BFormGroup class="mt-2" label="Ár:" label-for="price" v-bind="priceProps">
-      <BFormInput id="price" v-model="price" type="text" placeholder="350" required />
+      <BFormInput id="price" v-model.number="price" type="text" placeholder="350" required />
     </BFormGroup>
     <BFormGroup class="mt-2" label="Raktárkészlet:" label-for="stock" v-bind="stockProps">
-      <BFormInput id="stock" v-model="stock" type="text" placeholder="14" required />
+      <BFormInput id="stock" v-model.number="stock" type="text" placeholder="14" required />
     </BFormGroup>
     <BFormGroup class="mt-2" label="Kiszerelés:" label-for="amount-value" v-bind="amountValueProps">
-      <BFormInput id="amount-value" v-model="amountValue" type="text" placeholder="25" required />
+      <BFormInput id="amount-value" v-model.number="amountValue" type="text" placeholder="25" required />
     </BFormGroup>
     <BFormGroup v-bind="amountUnitProps">
       <BFormSelect class="mt-2" id="amount-unit" v-model="amountUnit" required>
