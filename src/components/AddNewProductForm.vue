@@ -1,46 +1,55 @@
 <script setup>
 import { Unit } from '@/models/unit';
-import { ref } from 'vue';
+import { productFormSchema } from '@/schemas/productFormSchema';
+import { useForm } from 'vee-validate';
+
+const { errors, defineField, handleSubmit, resetForm } = useForm({
+  validationSchema: productFormSchema,
+  initialValues: {
+    amount: {
+      value: null,
+      unit: null,
+    },
+  },
+});
+
+const bootstrapConfig = (state) => ({
+  props: {
+    invalidFeedback: state.errors[0],
+    state: state.errors[0] ? false : state.touched ? true : undefined,
+  },
+});
+
+const [name, nameProps] = defineField('name', bootstrapConfig);
+const [price, priceProps] = defineField('price', bootstrapConfig);
+const [stock, stockProps] = defineField('stock', bootstrapConfig);
+const [amountValue, amountValueProps] = defineField('amount.value', bootstrapConfig);
+const [amountUnit, amountUnitProps] = defineField('amount.unit', bootstrapConfig);
 
 const emit = defineEmits(['add-new-product']);
-const product = ref({ amount: { unit: null } });
 
-function submitForm() {
-  emit('add-new-product', product.value);
+const onSubmit = handleSubmit((values) => {
+  emit('add-new-product', values);
   resetForm();
-}
-
-function resetForm() {
-  product.value = { amount: { unit: null } };
-}
+});
 </script>
 
 <template>
-  <BForm @submit.prevent="submitForm" @reset="resetForm">
-    <BFormGroup class="mt-2" label="Termék neve:" label-for="product-name">
-      <BFormInput
-        id="product-name"
-        v-model="product.name"
-        type="text"
-        placeholder="Répa"
-        required
-      />
+  <BForm @submit.prevent="onSubmit" @reset="resetForm">
+    <BFormGroup class="mt-2" label="Termék neve:" label-for="product-name" v-bind="nameProps">
+      <BFormInput id="product-name" v-model="name" type="text" placeholder="Répa" required />
     </BFormGroup>
-    <BFormGroup class="mt-2" label="Ár:" label-for="price">
-      <BFormInput id="price" v-model="product.price" type="text" placeholder="350" required />
+    <BFormGroup class="mt-2" label="Ár:" label-for="price" v-bind="priceProps">
+      <BFormInput id="price" v-model="price" type="text" placeholder="350" required />
     </BFormGroup>
-    <BFormGroup class="mt-2" label="Raktárkészlet:" label-for="stock">
-      <BFormInput id="stock" v-model="product.stock" type="text" placeholder="14" required />
+    <BFormGroup class="mt-2" label="Raktárkészlet:" label-for="stock" v-bind="stockProps">
+      <BFormInput id="stock" v-model="stock" type="text" placeholder="14" required />
     </BFormGroup>
-    <BFormGroup class="mt-2" label="Kiszerelés:" label-for="amount-value">
-      <BFormInput
-        id="amount-value"
-        v-model="product.amount.value"
-        type="text"
-        placeholder="25"
-        required
-      />
-      <BFormSelect class="mt-2" id="amount-unit" v-model="product.amount.unit" required>
+    <BFormGroup class="mt-2" label="Kiszerelés:" label-for="amount-value" v-bind="amountValueProps">
+      <BFormInput id="amount-value" v-model="amountValue" type="text" placeholder="25" required />
+    </BFormGroup>
+    <BFormGroup v-bind="amountUnitProps">
+      <BFormSelect class="mt-2" id="amount-unit" v-model="amountUnit" required>
         <BFormSelectOption :value="null">Kiszerelés kiválasztása</BFormSelectOption>
         <BFormSelectOption v-for="[key, value] in Object.entries(Unit)" :value="value"
           >{{ key }} ({{ value }})</BFormSelectOption
