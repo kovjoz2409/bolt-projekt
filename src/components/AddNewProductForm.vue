@@ -3,7 +3,7 @@ import { Unit } from '@/models/unit';
 import { productFormSchema } from '@/schemas/productFormSchema';
 import { useForm } from 'vee-validate';
 
-const { errors, defineField, handleSubmit, resetForm } = useForm({
+const { defineField, handleSubmit, resetForm } = useForm({
   validationSchema: productFormSchema,
   initialValues: {
     amount: {
@@ -16,7 +16,7 @@ const { errors, defineField, handleSubmit, resetForm } = useForm({
 const bootstrapConfig = (state) => ({
   props: {
     invalidFeedback: state.errors[0],
-    state: state.errors[0] ? false : state.touched ? true : undefined,
+    state: state.errors[0] ? false : IsTouched(state),
   },
 });
 
@@ -32,6 +32,11 @@ const onSubmit = handleSubmit((values) => {
   emit('add-new-product', values);
   resetForm();
 });
+
+function IsTouched(state) {
+  return state.touched ? true : undefined;
+}
+
 </script>
 
 <template>
@@ -57,7 +62,7 @@ const onSubmit = handleSubmit((values) => {
     <BFormGroup v-bind="amountUnitProps">
       <BFormSelect class="mt-2" id="amount-unit" v-model="amountUnit" required>
         <BFormSelectOption :value="null">Kiszerelés kiválasztása</BFormSelectOption>
-        <BFormSelectOption v-for="[key, value] in Object.entries(Unit)" :value="value"
+        <BFormSelectOption v-for="[key, value] in Object.entries(Unit)" :value="value" :key="key"
           >{{ key }} ({{ value }})</BFormSelectOption
         >
       </BFormSelect>
