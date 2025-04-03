@@ -28,8 +28,7 @@ describe('ProductList', () => {
       props: { products: products },
     });
 
-    const button = wrapper.find('button');
-    await button.trigger('click');
+    await wrapper.find('button').trigger('click');
 
     expect(wrapper.emitted('add-to-cart')).toBeTruthy();
     expect(wrapper.emitted('add-to-cart')[0]).toEqual([products[0]]);
