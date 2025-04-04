@@ -3,9 +3,11 @@ import ProductList from '@/components/ProductList.vue';
 import { useCartStore } from '@/stores/cart';
 import { useProductStore } from '@/stores/product.js';
 import { toRaw } from 'vue';
+import { useToast } from 'vue-toastification';
 
 const productStore = useProductStore();
 const cartStore = useCartStore();
+const toast = useToast();
 
 function addToCartHandler(product) {
   const cartProduct = { ...toRaw(product), pieceQty: 1 };
@@ -13,6 +15,8 @@ function addToCartHandler(product) {
 
   cartStore.addToCart(cartProduct);
   productStore.decreaseProductStockById(cartProduct.id);
+
+  toast(`${cartProduct.name} hozzáadva a kosárhoz`);
 }
 </script>
 
