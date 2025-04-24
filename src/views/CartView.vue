@@ -1,6 +1,6 @@
 <script setup>
 import CartTable from '@/components/CartTable.vue';
-import { useCartStore } from '@/stores/cart';
+import { useCartStore } from '@/stores/cart.js';
 import { useToast } from 'vue-toastification';
 
 const cartStore = useCartStore();

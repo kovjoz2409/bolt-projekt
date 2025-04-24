@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { mount } from '@vue/test-utils';
-import { Unit } from '@/models/unit';
+import { Unit } from '@/models/unit.js';
 import AddNewProductForm from '../AddNewProductForm.vue';
 
 describe('AddNewProductForm', () => {

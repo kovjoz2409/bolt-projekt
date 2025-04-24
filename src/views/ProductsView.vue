@@ -1,6 +1,6 @@
 <script setup>
 import ProductList from '@/components/ProductList.vue';
-import { useCartStore } from '@/stores/cart';
+import { useCartStore } from '@/stores/cart.js';
 import { useProductStore } from '@/stores/product.js';
 import { toRaw } from 'vue';
 import { useToast } from 'vue-toastification';

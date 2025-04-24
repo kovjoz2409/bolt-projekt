@@ -1,4 +1,4 @@
-import { Unit } from '@/models/unit';
+import { Unit } from '@/models/unit.js';
 import { toTypedSchema } from '@vee-validate/zod';
 import { number, preprocess, z } from 'zod';
 

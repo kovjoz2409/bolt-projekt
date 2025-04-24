@@ -1,6 +1,6 @@
 <script setup>
-import { Unit } from '@/models/unit';
-import { productFormSchema } from '@/schemas/productFormSchema';
+import { Unit } from '@/models/unit.js';
+import { productFormSchema } from '@/schemas/productFormSchema.js';
 import { useForm } from 'vee-validate';
 
 const { defineField, handleSubmit, resetForm } = useForm({
