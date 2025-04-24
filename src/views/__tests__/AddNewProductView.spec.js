@@ -1,10 +1,14 @@
 import { describe, it, vi, expect } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
+import { defineComponent } from 'vue';
 
-describe('AddNewProductView', () => {
+describe('AddNewProductView', async () => {
   it('calls productStore.addProduct and toast when add-new-product is emitted', async () => {
     const toastMock = vi.fn();
-    const productStoreMock = { addProduct: vi.fn() };
+    const productStoreMock = {
+      addProduct: vi.fn(),
+      fetchProducts: vi.fn(),
+    };
 
     vi.doMock('vue-toastification', () => ({
       useToast: () => toastMock,
@@ -16,7 +20,12 @@ describe('AddNewProductView', () => {
 
     const { default: AddNewProductView } = await import('@/views/AddNewProductView.vue');
 
-    const wrapper = mount(AddNewProductView, {
+    const component = defineComponent({
+      components: { AddNewProductView },
+      template: '<Suspense><AddNewProductView/></Suspense>',
+    });
+
+    const wrapper = mount(component, {
       global: {
         stubs: {
           AddNewProductForm: true,
@@ -24,10 +33,15 @@ describe('AddNewProductView', () => {
       },
     });
 
+    await flushPromises();
+
     wrapper
       .findComponent({ name: 'AddNewProductForm' })
       .vm.$emit('add-new-product', { name: 'Mocked Termék' });
 
+    await flushPromises();
+
+    expect(productStoreMock.fetchProducts).toBeCalledTimes(1);
     expect(productStoreMock.addProduct).toHaveBeenCalledWith({ name: 'Mocked Termék' });
     expect(toastMock).toHaveBeenCalledWith('Mocked Termék hozzáadva a termékekhez');
   });

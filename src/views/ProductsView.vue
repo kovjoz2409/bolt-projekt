@@ -9,12 +9,14 @@ const productStore = useProductStore();
 const cartStore = useCartStore();
 const toast = useToast();
 
-function addToCartHandler(product) {
+await productStore.fetchProducts();
+
+async function addToCartHandler(product) {
   const cartProduct = { ...toRaw(product), pieceQty: 1 };
   delete cartProduct.stock;
 
   cartStore.addToCart(cartProduct);
-  productStore.decreaseProductStockById(cartProduct.id);
+  await productStore.decreaseProductStockById(cartProduct.id);
 
   toast(`${cartProduct.name} hozzáadva a kosárhoz`);
 }

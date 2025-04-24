@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
+import { defineComponent } from 'vue';
 
 describe('ProductsView', () => {
   let cartStoreMock;
@@ -19,6 +20,7 @@ describe('ProductsView', () => {
         { id: 2, name: 'Termék 2', stock: 5, amount: 1, price: 2000 },
       ],
       decreaseProductStockById: vi.fn(),
+      fetchProducts: vi.fn(),
     };
 
     vi.doMock('vue-toastification', () => {
@@ -42,7 +44,14 @@ describe('ProductsView', () => {
 
   it('renders products list correctly', async () => {
     const { default: ProductsView } = await import('@/views/ProductsView.vue');
-    const wrapper = mount(ProductsView);
+    const wrapper = mount(
+      defineComponent({
+        components: { ProductsView },
+        template: '<Suspense><ProductsView/></Suspense>',
+      }),
+    );
+
+    await flushPromises();
 
     expect(wrapper.text()).toContain('Termékek');
     expect(wrapper.findAllComponents({ name: 'ProductList' }).length).toBe(1);
@@ -53,17 +62,32 @@ describe('ProductsView', () => {
     productStoreMock.products = [];
 
     const { default: ProductsView } = await import('@/views/ProductsView.vue');
-    const wrapper = mount(ProductsView);
+    const wrapper = mount(
+      defineComponent({
+        components: { ProductsView },
+        template: '<Suspense><ProductsView/></Suspense>',
+      }),
+    );
+
+    await flushPromises();
 
     expect(wrapper.text()).toContain('Nincsenek elérhető termékek.');
     expect(wrapper.findComponent({ name: 'ProductList' }).exists()).toBe(false);
+    expect(productStoreMock.fetchProducts).toBeCalledTimes(1);
   });
 
   it('calls addToCart and decreaseProductStock when "add-to-cart" event is emitted', async () => {
     delete productStoreMock.products[0].stock;
 
     const { default: ProductsView } = await import('@/views/ProductsView.vue');
-    const wrapper = mount(ProductsView);
+    const wrapper = mount(
+      defineComponent({
+        components: { ProductsView },
+        template: '<Suspense><ProductsView/></Suspense>',
+      }),
+    );
+
+    await flushPromises();
 
     await wrapper
       .findComponent({ name: 'ProductList' })
@@ -78,7 +102,14 @@ describe('ProductsView', () => {
 
   it('handles the case where product stock is updated correctly', async () => {
     const { default: ProductsView } = await import('@/views/ProductsView.vue');
-    const wrapper = mount(ProductsView);
+    const wrapper = mount(
+      defineComponent({
+        components: { ProductsView },
+        template: '<Suspense><ProductsView/></Suspense>',
+      }),
+    );
+
+    await flushPromises();
 
     await wrapper
       .findComponent({ name: 'ProductList' })

@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@vee-validate/zod": "^4.15.0",
+    "axios": "^1.8.4",
     "bootstrap": "^5.3.5",
     "bootstrap-vue-next": "^0.28.6",
+    "json-server": "^1.0.0-beta.3",
     "pinia": "^3.0.2",
     "vee-validate": "^4.15.0",
     "vue": "^3.5.13",

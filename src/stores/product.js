@@ -1,27 +1,27 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { getProductById, getProducts, postProduct, putProduct } from '@/services/productService';
 
 export const useProductStore = defineStore('product', () => {
-  const products = ref([
-    { id: 1, name: 'Alma', price: 300, stock: 4, amount: { value: 1, unit: 'kg' } },
-    { id: 2, name: 'Tej', price: 400, stock: 3, amount: { value: 1, unit: 'l' } },
-    { id: 3, name: 'Vöröslencse', price: 499, stock: 5, amount: { value: 500, unit: 'g' } },
-    { id: 4, name: 'Vöröslencse', price: 998, stock: 10, amount: { value: 1, unit: 'kg' } },
-  ]);
-  let nextId = 5;
+  const products = ref([]);
 
-  function addProduct(product) {
-    const newProduct = {
-      id: nextId++,
-      ...product,
-    };
-    products.value.push(newProduct);
+  async function fetchProducts() {
+    products.value.length = 0;
+    products.value = (await getProducts()).data;
   }
 
-  function decreaseProductStockById(id) {
-    const product = products.value.find((products) => products.id === id);
-    if (product && product.stock > 0) product.stock--;
+  async function addProduct(product) {
+    await postProduct(product);
   }
 
-  return { products, addProduct, decreaseProductStockById };
+  async function decreaseProductStockById(id) {
+    const product = (await getProductById(id)).data;
+    if (product && product.stock > 0) {
+      product.stock--;
+      await putProduct(product);
+      await fetchProducts();
+    }
+  }
+
+  return { products, fetchProducts, addProduct, decreaseProductStockById };
 });

@@ -16,6 +16,8 @@ import { RouterView } from 'vue-router';
   </BNavbar>
 
   <BContainer>
-    <RouterView />
+    <Suspense>
+      <RouterView />
+    </Suspense>
   </BContainer>
 </template>

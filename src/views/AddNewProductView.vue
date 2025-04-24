@@ -6,8 +6,10 @@ import { useToast } from 'vue-toastification';
 const productStore = useProductStore();
 const toast = useToast();
 
-function add(product) {
-  productStore.addProduct(product);
+await productStore.fetchProducts();
+
+async function add(product) {
+  await productStore.addProduct(product);
   toast(`${product.name} hozzáadva a termékekhez`);
 }
 </script>
